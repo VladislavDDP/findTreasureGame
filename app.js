@@ -19,19 +19,20 @@ function getRandomNumber(param){
 }
 
 
-// Считаем расстояние от точки нажатия до точки выигрыша
-function getDistance(){
-
+// Calculate distance from click to treasure
+function getDistance(point_1, point_2){
+    return Math.sqrt(Math.pow((point_1[0] - point_2[0]), 2)
+                     + Math.pow((point_1[1] - point_2[1]), 2))
 }
 
-// Выводим дистанцию и сообщение о том, насколько близко было предположение
+// Print distance and message about suggestion (cold, hot etc.)
 function printResult(){
 
 }
 
-// Поздравление игрока с победой, в случае правильного ответа
-function greetingIfWin() {
-    
+// Congratulate a winner if he/she made a correct guess
+function greetingIfWin(distance) {
+    if (distance < 20) alert('Win')
 }
 
 var target = {
@@ -40,5 +41,8 @@ var target = {
 }
 
 mapElement.click(event => {
-    // Обработчик событий
+    // Event listener
+    distance = getDistance([event.offsetX, event.offsetY], [target.x, target.y])
+    console.log(distance)
+    greetingIfWin(distance)
 })
