@@ -10,19 +10,17 @@ function clickEffect(e){
 }
 document.addEventListener('click', clickEffect);
 
-var clickCounter = 0
-
-// JS style
-/*
-const mapElement = document.querySelector('#map')  
-const width = mapElement.getAttribute('width')
-const height = mapElement.getAttribute('height')
-*/
 
 // JQuery style
 const mapElement = $('#map')  
 const width = mapElement.attr('width')
 const height = mapElement.attr('height')
+const messageParagraph = $('#distance')
+
+
+// variables declaration
+var clickCounter = 0
+let win = false
 
 
 // Get random number from 0 to param
@@ -41,25 +39,28 @@ function getDistance(point_1, point_2){
 // Print distance and message about suggestion (cold, hot etc.)
 function printHint(distance){
     if (distance < 20) {
-    return "В точку!";
+    return "Yeeeah!";
     } else if (distance < 40) {
-    return "Очень горячо";
+    return "Extremely hot";
     } else if (distance < 60) {
-    return "Горячо";
+    return "Hot";
     } else if (distance < 80) {
-    return "Тепло";
+    return "Warm";
     } else if (distance < 160) {
-    return "Холодно";
+    return "Cold";
     } else if (distance < 320) {
-    return "Очень холодно";
+    return "Very cold";
     } else {
-    return "Замерзнешь!";
+    return "Just give up! You have no chances...";
     }
 }
 
 // Congratulate a winner if he/she made a correct guess
 function greetingIfWin(distance, clickConter) {
-    if (distance < 20) console.log(`You win for ${clickCounter} steps`)
+    if (distance < 20) {
+        messageParagraph.append(` You win for ${clickCounter} steps`)
+        win = true
+    }
 }
 
 var target = {
@@ -69,8 +70,13 @@ var target = {
 
 mapElement.click(event => {
     // Event listener
-    clickCounter++
-    distance = getDistance([event.offsetX, event.offsetY], [target.x, target.y])
-    console.log(printHint(distance)) 
-    greetingIfWin(distance, clickCounter)
+    if (!win){
+        clickCounter++
+        distance = getDistance([event.offsetX, event.offsetY], [target.x, target.y])
+        messageParagraph.text(`${printHint(distance)}`)
+        greetingIfWin(distance, clickCounter)
+    }
+    else {
+        messageParagraph.text(`Enough, you are a winner! Best score = ${clickCounter}`)
+    }
 })
