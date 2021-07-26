@@ -1,3 +1,15 @@
+// Click animation
+function clickEffect(e){
+    var d=document.createElement("div");
+    d.className="clickEffect";
+    d.style.top=e.clientY+"px";
+    d.style.left=e.clientX+"px";
+    document.body.appendChild(d);
+    d.addEventListener('animationend', function(){
+        d.parentElement.removeChild(d)}.bind(this));
+}
+document.addEventListener('click', clickEffect);
+
 var clickCounter = 0
 
 // JS style
@@ -21,8 +33,9 @@ function getRandomNumber(param){
 
 // Calculate distance from click to treasure
 function getDistance(point_1, point_2){
-    return Math.sqrt(Math.pow((point_1[0] - point_2[0]), 2)
-                     + Math.pow((point_1[1] - point_2[1]), 2))
+    xDiff = point_1[0] - point_2[0]
+    yDiff = point_1[1] - point_2[1]
+    return Math.sqrt(xDiff * xDiff + yDiff * yDiff)
 }
 
 // Print distance and message about suggestion (cold, hot etc.)
@@ -31,8 +44,8 @@ function printResult(){
 }
 
 // Congratulate a winner if he/she made a correct guess
-function greetingIfWin(distance) {
-    if (distance < 20) alert('Win')
+function greetingIfWin(distance, clickConter) {
+    if (distance < 20) console.log(`You win for ${clickCounter} steps`)
 }
 
 var target = {
@@ -42,7 +55,8 @@ var target = {
 
 mapElement.click(event => {
     // Event listener
+    clickCounter++
     distance = getDistance([event.offsetX, event.offsetY], [target.x, target.y])
     console.log(distance)
-    greetingIfWin(distance)
+    greetingIfWin(distance, clickCounter)
 })
