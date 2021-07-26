@@ -16,10 +16,12 @@ const mapElement = $('#map')
 const width = mapElement.attr('width')
 const height = mapElement.attr('height')
 const messageParagraph = $('#distance')
+const showTryCounts = $('#try_counts')
 
 
 // variables declaration
 var clickCounter = 0
+var tryCounts = 20
 let win = false
 
 
@@ -38,28 +40,25 @@ function getDistance(point_1, point_2){
 
 // Print distance and message about suggestion (cold, hot etc.)
 function printHint(distance){
-    if (distance < 20) {
-    return "Yeeeah!";
-    } else if (distance < 40) {
-    return "Extremely hot";
-    } else if (distance < 60) {
-    return "Hot";
-    } else if (distance < 80) {
-    return "Warm";
-    } else if (distance < 160) {
-    return "Cold";
-    } else if (distance < 320) {
-    return "Very cold";
-    } else {
-    return "Just give up! You have no chances...";
-    }
+    let result = ''
+    distance < 20? result = "Yeeeah!" : distance < 60?
+    result = "Extremely hot": distance < 80?
+    result = "Hot": distance < 160?
+    result = "Cold": distance < 320?
+    result = "Very cold": result = "Just give up! You have no chances..."
+    return result
 }
 
 // Congratulate a winner if he/she made a correct guess
-function greetingIfWin(distance, clickConter) {
+function greetingIfWin(distance, clickConter, positinX, positionY) {
     if (distance < 20) {
         messageParagraph.append(` You win for ${clickCounter} steps`)
         win = true
+        var d = document.getElementById('yourDivId');
+        d.style.position = "absolute";
+        d.style.left = positinX - 10 +'px';
+        d.style.top = positionY + 60 +'px';       
+        d.innerHTML = 'treasure'
     }
 }
 
@@ -70,11 +69,15 @@ var target = {
 
 mapElement.click(event => {
     // Event listener
-    if (!win){
+    tryCounts? tryCounts-- : 0
+    if (!win && tryCounts){
         clickCounter++
         distance = getDistance([event.offsetX, event.offsetY], [target.x, target.y])
         messageParagraph.text(`${printHint(distance)}`)
-        greetingIfWin(distance, clickCounter)
+        greetingIfWin(distance, clickCounter, target.x, target.y)
+    }
+    else if (!tryCounts) {
+        showTryCounts.text('You are a loser!')
     }
     else {
         messageParagraph.text(`Enough, you are a winner! Best score = ${clickCounter}`)
