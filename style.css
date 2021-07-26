@@ -13,13 +13,13 @@ div.clickEffect {
     width: 0.5em;
     height: 0.5em;
     margin: -0.25em;
-    border-width: 0.5em;
+    border-width: 0.8em;
   }
   100% {
     opacity: 0.2;
     width: 15em;
     height: 15em;
     margin: -7.5em;
-    border-width: 0.03em;
+    border-width: 0.05em;
   }
 }

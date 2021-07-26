@@ -39,8 +39,22 @@ function getDistance(point_1, point_2){
 }
 
 // Print distance and message about suggestion (cold, hot etc.)
-function printResult(){
-
+function printHint(distance){
+    if (distance < 20) {
+    return "В точку!";
+    } else if (distance < 40) {
+    return "Очень горячо";
+    } else if (distance < 60) {
+    return "Горячо";
+    } else if (distance < 80) {
+    return "Тепло";
+    } else if (distance < 160) {
+    return "Холодно";
+    } else if (distance < 320) {
+    return "Очень холодно";
+    } else {
+    return "Замерзнешь!";
+    }
 }
 
 // Congratulate a winner if he/she made a correct guess
@@ -57,6 +71,6 @@ mapElement.click(event => {
     // Event listener
     clickCounter++
     distance = getDistance([event.offsetX, event.offsetY], [target.x, target.y])
-    console.log(distance)
+    console.log(printHint(distance)) 
     greetingIfWin(distance, clickCounter)
 })
